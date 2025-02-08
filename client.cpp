@@ -3,9 +3,7 @@
 #include <iostream>
 #include <string>
 #include <unistd.h>
-#include <sstream>
 #include "Datagram1.h"
-#include <typeinfo>
 
 #define INTERMEDIATE_HOST 23
 #define SERVER 69
@@ -38,6 +36,8 @@ public:
         }
 
         std::cout << "Client: Packet sent." << std::endl;
+
+        recievePacket_func();
 
     }
 
@@ -90,24 +90,31 @@ public:
 
         packet_data.push_back(0x0);
 
-        for (char i: packet_data)
-            if (i <= 0x10) {
-                std::cout << std::hex << static_cast<int>(i);
-            }
-            else {
-            std::cout << i;
-            }
-        std::cout << std::endl;
+        print_packet(packet_data);
 
         return packet_data;
     }
+
+
+        void print_packet(std::vector<uint8_t> packet_data) {
+
+            for (char i: packet_data)
+                if (i <= 0x10) {
+                    std::cout << std::hex << static_cast<int>(i);
+                }
+                else {
+                std::cout << i;
+                }
+            std::cout << std::endl;
+        }
+
 };
 
 int main() {
 
     std::vector<uint8_t> packet_data = Client().create_packet_data();
     Client().send(packet_data);
-    Client().recievePacket_func();
+    /* Client().recievePacket_func(); */
     return 0;
 
 }
